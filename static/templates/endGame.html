@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game - End Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+
+        .center-bottom-image {
+            position: absolute;
+            bottom: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75%;
+            max-width: 200px;
+            height: auto;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>{{if .Win}}Win{{else}}Game Over{{end}}</h1>
+    <p>Word: {{.Word}}</p>
+    <p>{{if .Win}}You Win!{{else}}You loose, you are Hanged !{{end}}</p>
+    <p>{{.PlayerName}}</p>
+    <form action="/restart" method="post">
+        <input type="hidden" name="restart" value="true">
+        <button type="submit">Restart Game</button>
+    </form>
+
+    <div id="hangmanDrawing" class="container">
+        <img src="/static/picture/{{.CurrentDrawingStep}}.png" class="center-bottom-image">
+    </div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        img {
+            position: absolute;
+            top: 15%;
+            left: 67%;
+        }
+    </style>
+    <script>
+
+        function normalizeAccentedCharacters(input) {
+            return input.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function checkGuessType() {
+            var guessInput = document.getElementById('guess');
+            guessInput.value = normalizeAccentedCharacters(guessInput.value);
+            if (guessInput.value.length === 1) {
+                guessInput.setAttribute('name', 'guess');
+            } else {
+                guessInput.setAttribute('name', 'wordGuess');
+            }
+        }
+
+        function submitForm() {
+            var guessInput = document.getElementById('guess');
+            var wordGuessInput = document.getElementById('wordGuess');
+            var letterUsed = document.getElementById('letterUsed');
+            var wordUsed = document.getElementById('wordUsed');
+
+            // Vérifier si la lettre a déjà été tentée
+            if (letterUsed && letterUsed.textContent && letterUsed.textContent.trim().includes(guessInput.value)) {
+                guessInput.value = '';
+                return;
+            }
+
+            // Vérifier si le mot a déjà été tenté
+            if (wordUsed && wordUsed.textContent && wordUsed.textContent.trim().includes(wordGuessInput.value)) {
+                wordGuessInput.value = '';
+                return;
+            }
+            document.getElementById('hangmanForm').submit();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                submitForm();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var guessInput = document.getElementById('guess');
+            var submitButton = document.getElementById('submitBtn');
+
+            guessInput.addEventListener('keypress', handleKeyPress);
+
+            if (submitButton) {
+                submitButton.addEventListener('click', submitForm);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="hangmanDrawing">
+        <img src="/static/picture/{{.CurrentDrawingStep}}.png" width="400" height="400">
+    </div>
+    <h1>Hangman Game</h1>
+    
+    <p>Display: {{.Display}}</p>
+    <p>Attempts left: {{.Attempts}} / {{.MaxAttempts}}</p>
+    <p>Word used: {{.IncorrectWords}}</p>
+    <p>Letter used: {{.Incorrect}}</p>
+    <form id="hangmanForm" method="post" action="/play" oninput="checkGuessType()">
+        <label for="guess">Guess a letter or a word:</label>
+        <input type="text" id="guess" maxlength="20" required>
+        <input type="text" id="wordGuess" style="display: none;" maxlength="20" required>
+        <button type="button" id="submitBtn">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game - Difficulty Selector</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            animation: fadeIn 1s ease-in-out;
+            background-color: #fff;
+        }
+
+        select:hover,
+        select:focus {
+            background-color: #eee;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Ajout de couleur pour chaque niveau de difficulté */
+        select.easy {
+            background-color: #8FED8F;
+        }
+
+        select.normal {
+            background-color: #FFD700;
+        }
+
+        select.hard {
+            background-color: #FF6347;
+        }
+    </style>
+
+<script>
+    function changeSelectColor() {
+        var select = document.getElementById("file");
+        var selectedOption = select.options[select.selectedIndex];
+
+        select.className = "";
+
+        // Ajouter la classe correspondante au niveau de difficulté
+        if (selectedOption.value === "words/words.txt") {
+            select.className = "easy";
+        } else if (selectedOption.value === "words/words2.txt") {
+            select.className = "normal";
+        } else if (selectedOption.value === "words/words3.txt") {
+            select.className = "hard";
+        }
+    }
+
+    document.getElementById("file").addEventListener("change", changeSelectColor);
+</script>
+</head>
+<body>
+    <h1>Hangman Game - Difficulty Selector</h1>
+    <form method="post" action="/difficulty">
+        <label for="file">Select a difficulty :</label>
+        <select name="selectedDifficulty" id="file">
+            <option value="words/words.txt">Easy</option>
+            <option value="words/words2.txt">Normal</option>
+            <option value="words/words3.txt">Hard</option>
+        </select>
+        <button type="submit">Start Game</button>
+    </form>
+</body>
+</html>
